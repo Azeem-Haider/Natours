@@ -22,7 +22,9 @@ exports.getCheckoutSession = catchAsyc(async (req, res, next) => {
       {
         name: `${tour.name} Tour`,
         description: tour.summary,
-        images: [`/img/tours/${tour.imageCover}`],
+        images: [
+          `https://stark-wildwood-02045.herokuapp.com/img/tours/${tour.imageCover}`,
+        ],
         amount: tour.price * 100,
         currency: 'usd',
         quantity: 1,
