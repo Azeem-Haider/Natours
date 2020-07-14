@@ -11,13 +11,13 @@ const signToken = (id) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
-const createSendToken = (user, statuscode, res) => {
+const createSendToken = (user, statuscode, req, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
     expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
+    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
   res.status(statuscode).json({
@@ -37,7 +37,7 @@ exports.signUp = catchAsyc(async (req, res, next) => {
   });
   const url = `${req.protocol}://${req.get('host')}/me`;
   await new Email(newUser, url).sendWelcome();
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 exports.login = catchAsyc(async (req, res, next) => {
   const { email, password } = req.body;
@@ -48,7 +48,7 @@ exports.login = catchAsyc(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('incorrect email or password', 401));
   }
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
@@ -168,7 +168,7 @@ module.exports.resetPassword = catchAsyc(async (req, res, next) => {
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
   user.save();
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 exports.updatePasword = catchAsyc(async (req, res, next) => {
   const user = await User.findById(req.user._id).select('+password');
@@ -178,5 +178,5 @@ exports.updatePasword = catchAsyc(async (req, res, next) => {
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });

@@ -20,7 +20,7 @@ mongoose
     console.log('Error');
   });
 const port = process.env.PORT || 8000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`app running on port ${port}...`);
 });
 process.on('unhandledRejection', (err) => {
@@ -35,3 +35,9 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 //console.log(x);
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received shutting down gracefully');
+  server.close(() => {
+    console.log('process terminated');
+  });
+});
