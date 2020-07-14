@@ -22,7 +22,7 @@ exports.getCheckoutSession = catchAsyc(async (req, res, next) => {
       {
         name: `${tour.name} Tour`,
         description: tour.summary,
-        images: [tour.imageCover],
+        images: [`/img/tours/${tour.imageCover}`],
         amount: tour.price * 100,
         currency: 'usd',
         quantity: 1,

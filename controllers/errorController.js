@@ -6,7 +6,7 @@ const handleCastErrorDB = (err) => {
 };
 const handleDuplicatefieldsDB = (err) => {
   const value = err.errmsg.match(/(["'])(?:(?=(\\?))\2.)*?\1/)[0];
-  const message = `duplicate field value ${value} please use and other id`;
+  const message = `This email id already exists ${value} please use and other id`;
   return new AppError(message, 400);
 };
 const handleValidationErrorDB = (err) => {
