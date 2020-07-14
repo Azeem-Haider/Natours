@@ -12,7 +12,13 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      return 1;
+      return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_FROM,
+          pass: process.env.E_PASSWORD,
+        },
+      });
     }
     return nodemailer.createTransport({
       service: 'gmail',
