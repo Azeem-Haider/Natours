@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
@@ -25,7 +26,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 //serve static files
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors());
+//respond to complex requests delete patch etc
+//app.options('*', cors());
+//app.options('/api/v1/tours/:id', cors());
 //set security http headers
 app.use(helmet());
 if (process.env.NODE_ENV === 'development') {
