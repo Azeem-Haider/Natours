@@ -6,17 +6,17 @@ const AppError = require('../utils/appError');
 
 exports.getOverview = catchAsyc(async (req, res, next) => {
   //Get tour data from collection
-  if (res.locals.user) {
-    const bookings = await Booking.find({ user: res.locals.user._id });
-    const tourids = bookings.map((el) => el.tour);
-    const tours = await Tour.find({ _id: { $nin: tourids } });
-    return res.status(200).render('overview', {
-      title: 'All Tours',
-      tours,
-    });
-  }
+  // if (res.locals.user) {
+  //   const bookings = await Booking.find({ user: res.locals.user._id });
+  //   const tourids = bookings.map((el) => el.tour);
+  //   const tours = await Tour.find({ _id: { $nin: tourids } });
+  //   return res.status(200).render('overview', {
+  //     title: 'All Tours',
+  //     tours,
+  //   });
+  // }
   const tours = await Tour.find();
-  return res.status(200).render('overview', {
+  res.status(200).render('overview', {
     title: 'All Tours',
     tours,
   });
