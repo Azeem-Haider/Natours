@@ -5,9 +5,10 @@ const viewController = require('../controllers/viewController');
 const authcontroller = require('../controllers/authController');
 const bookingsController = require('../controllers/bookingController');
 
+router.use(viewController.alerts);
 router.get(
   '/',
-  bookingsController.createBookingCheckout,
+  //bookingsController.createBookingCheckout,
   authcontroller.isLoggedIn,
   viewController.getOverview
 );
