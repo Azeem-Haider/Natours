@@ -29,7 +29,7 @@ exports.getOverview = catchAsyc(async (req, res, next) => {
   });
 });
 exports.getTour = catchAsyc(async (req, res, next) => {
-  const tour = await Tour.find({ slug: req.params.slug }).populate({
+  const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
     fields: 'review rating user',
   });
